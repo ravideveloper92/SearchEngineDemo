@@ -1,11 +1,7 @@
 package web.search;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,11 +9,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -39,30 +38,11 @@ public class MainActivity extends AppCompatActivity implements AsyncDelegate {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_t);
-        resolvePermissionAndInitView();
+        initView();
+
     }
 
-    private void resolvePermissionAndInitView() {
-        int permission = ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET);
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, PERMISSIONS_REQUEST_INTERNET);
-        } else {
-            initView();
-        }
-    }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_INTERNET: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    initView();
-                } else {
-                    this.finish();
-                }
-            }
-        }
-    }
 
     private void runAsyncTask(String query, int firstID) {
         mGObjectAdapter.getData().add(null);
@@ -92,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements AsyncDelegate {
 
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     if (event.getRawX() >= (eText.getRight() - eText.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        Log.d(TAG, "onTouch: ");
                         // your action here
                         if (eText.getText().toString().trim().length() > 0) {
                             callAPI();
@@ -105,6 +86,21 @@ public class MainActivity extends AppCompatActivity implements AsyncDelegate {
             }
         });
 
+        eText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    if (eText.getText().toString().trim().length() > 0) {
+                        callAPI();
+                        return true;
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Please Enter Input ", Toast.LENGTH_SHORT).show();
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
 
         mGObjectAdapter = new GObjectAdapter(getApplicationContext());
         mLayoutManager = new LinearLayoutManager(getApplicationContext());

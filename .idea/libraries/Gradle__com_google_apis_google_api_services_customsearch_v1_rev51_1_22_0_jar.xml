@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.google.apis:google-api-services-customsearch:v1-rev51-1.22.0@jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.apis/google-api-services-customsearch/v1-rev51-1.22.0/da0c47d186b66f7937a7680bb5e15c29212df0be/google-api-services-customsearch-v1-rev51-1.22.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.apis/google-api-services-customsearch/v1-rev51-1.22.0/81c87d185aaa4347a8842b92e63b29fe2f166727/google-api-services-customsearch-v1-rev51-1.22.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
